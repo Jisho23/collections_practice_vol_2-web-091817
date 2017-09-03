@@ -30,25 +30,17 @@ end
 
 def merge_data(data1, data2)
   merged_hashes = []
-  data1.each do |k, v|
-    if k.values.join("") == "blake"
-            new_hash = {:first_name => "blake", :awesomeness => 10,
-           :height => "74",
-           :last_name => "johnson"}
-           merged_hashes << new_hash
-    elsif k.values.join("") == "ashley"
-        new_hash = {:first_name => "ashley", :awesomeness => 10,
-       :height => "74",
-       :last_name => "johnson"}
-       merged_hashes << new_hash
+  data1.each do |person_name|
+    current_name = person_name[:first_name]
+    data2.each do |person_data|
+      if person_data[current_name]
+        merged_person = person_data[current_name]
+        merged_person[:first_name] = current_name
+        merged_hashes << merged_person
+      end
     end
-    return merged_hashes = [ {:first_name => "blake", :awesomeness => 10,
-   :height => "74",
-   :last_name => "johnson"}, {:first_name => "ashley", :awesomeness => 9,
-  :height => 60,
-  :last_name => "dubs"}]
   end
-
+  return merged_hashes
 end
 
 def find_cool(hashes)
@@ -62,9 +54,19 @@ def find_cool(hashes)
   return cool_hashes
 end
 
-def organize_schools(hash)
 
-  return organized_by_location = {"NYC"=>["flatiron school bk", "flatiron school", "general assembly"],
-     "SF"=>["dev boot camp", "Hack Reactor"],
-     "Chicago"=>["dev boot camp chicago"]}
+def organize_schools(hash)
+  organized_by_location = {}
+  hash.each do |school, location|
+
+    if organized_by_location[location[:location]]
+       organized_by_location[location[:location]] << school
+     else
+       organized_by_location[location[:location]] = []
+       organized_by_location[location[:location]] << school
+     end
+   end
+   binding.pry
+    return organized_by_location
+
 end
